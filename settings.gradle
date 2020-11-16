@@ -1,0 +1,4 @@
+include ':netapi-android'
+include ':netapi'
+include ':app'
+rootProject.name = "KotlinNetAPI"
