@@ -1,5 +1,7 @@
 package com.kalus.kotlinnetapi
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -9,9 +11,14 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class CoroutineUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun testLaunch() {
+        GlobalScope.launch {
+            println("user info")
+        }
+        repeat(8){
+            println("main thread $it")
+        }
     }
 }
