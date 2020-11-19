@@ -1,5 +1,7 @@
 package com.kalus.kotlinnetapi
 
+import org.junit.Test
+
 /**
  * desc:
  *
@@ -9,4 +11,8 @@ package com.kalus.kotlinnetapi
  **/
 class CoroutineContextDispatcher {
 
+    @Test
+    fun test(){
+
+    }
 }
