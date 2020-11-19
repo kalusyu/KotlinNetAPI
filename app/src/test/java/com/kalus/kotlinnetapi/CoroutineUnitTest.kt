@@ -1,7 +1,6 @@
 package com.kalus.kotlinnetapi
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -15,10 +14,93 @@ class CoroutineUnitTest {
     @Test
     fun testLaunch() {
         GlobalScope.launch {
-            println("user info")
+            delay(2000)
+            println("，world")
         }
-        repeat(8){
-            println("main thread $it")
+
+//        Thread{
+//            delay(3000)
+//        }.start()
+
+        print("hello")
+//        Thread.sleep(3000)  等于 runBlocking
+        runBlocking {
+            delay(3000)
         }
     }
+
+    @Test
+    fun testMySuspendingFunction() = runBlocking<Unit>{
+        println("welcome")
+    }
+
+    // join必须在协程内运行
+    @Test
+    fun testJobCoroutine() = runBlocking{
+        val job = GlobalScope.launch {
+            delay(1000)
+            println("World!!")
+        }
+
+        print("Hello,")
+        job.join()
+    }
+
+    @Test
+    fun effectScope() = runBlocking {
+        launch {
+            delay(2000)
+            println("Task from runBlocking")
+        }
+
+        coroutineScope {
+            launch {
+                delay(500L)
+                println("Task from nested launch")
+            }
+
+            delay(100L)
+            println("Task from coroutineScope")
+        }
+
+        println("CoroutineScope is over!")
+    }
+
+    @Test
+    fun testHookCoroutine() = runBlocking {
+        launch {
+            doWorld()
+        }
+        println("Hello,")
+    }
+
+    private suspend fun doWorld() {
+        delay(1000)
+        println("World!")
+    }
+
+    /**
+     * 大量创建协程与创建线程对比
+     */
+    @Test
+    fun testMuchCoroutine() = runBlocking {
+        repeat(100_000){
+            launch {
+//                delay(5000)
+                print(".")
+            }
+        }
+    }
+
+    @Test
+    fun testMuchThread() {
+        repeat(100_000){
+            Thread{
+                print("-")
+            }.start()
+        }
+    }
+
+
+
 }
