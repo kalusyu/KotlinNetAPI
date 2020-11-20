@@ -46,13 +46,17 @@ class CoroutineUnitTest {
         job.join()
     }
 
+    /**
+     * 除了由不同的构建器提供协程作⽤域之外，还可以使⽤ coroutineScope 构建器声明⾃⼰的作⽤域。它会创建⼀个协 程作⽤域并且在所有已启动⼦协程执⾏完毕之前不会结束。
+     */
     @Test
     fun effectScope() = runBlocking {
         launch {
-            delay(2000)
+            delay(200)
             println("Task from runBlocking")
         }
 
+        // 非阻塞的
         coroutineScope {
             launch {
                 delay(500L)
