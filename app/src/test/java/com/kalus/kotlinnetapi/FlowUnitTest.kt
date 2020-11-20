@@ -3,6 +3,7 @@ package com.kalus.kotlinnetapi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.junit.Test
+import kotlin.system.measureTimeMillis
 
 /**
  * desc:
@@ -160,17 +161,56 @@ class FlowUnitTest {
     }
 
     private fun simpleContext2(): Flow<Int> = flow {
-            for (i in (1..3)) {
-                Thread.sleep(100)
-                log("Emitting ")
-                emit(i)
-            }
+        for (i in (1..3)) {
+            Thread.sleep(100)
+            log("Emitting ")
+            emit(i)
+        }
     }.flowOn(Dispatchers.Default)
 
     fun log(msg: String) = println("[${Thread.currentThread().name}] $msg")
 
 
     // ==============================================
+
+    fun simple3(): Flow<Int> = flow {
+        for (i in (1..3)) {
+            delay(100)
+            emit(i)
+        }
+    }
+
+    @Test
+    fun testFlowNoBuffer() = runBlocking {
+
+        val time = measureTimeMillis {
+
+            simple3().collect {
+                delay(300)
+                println(it)
+            }
+        }
+        println("Consume time ： $time")
+    }
+
+    @Test
+    fun testFlowBuffer() = runBlocking {
+
+        val time = measureTimeMillis {
+
+            simple3().buffer(10).collect {
+                delay(300)
+                println(it)
+            }
+        }
+        println("Consume time ： $time")
+    }
+
+    // 处理最新值 conflate collectLatest
+
+    // 组合多个流 zip  combine
+
+    // 展平流 flatMapConcat flatMapMerge flatMapLatest
 
 
 
